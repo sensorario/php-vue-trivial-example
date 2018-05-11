@@ -1,0 +1,61 @@
+<html>
+  <body>
+    <div id="component">
+      {{ message }}
+    </div>
+    <div id="esempio_bottone">
+      <button v-on:click="counter += 1">Add 1</button>
+      <p>The button above has been clicked {{ counter }} times.</p>
+    </div>
+    <div id="form_esempio">
+      <form @submit.prevent="click_handler">
+        <input v-model="username" placeholder="username">
+        <input v-model="password" placeholder="password">
+        <button type="submit">send</button>
+      </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.0"></script>
+    <script language="javascript">
+      var component = new Vue({
+        el: '#component',
+        data: {
+          message: 'message inside component'
+        }
+      });
+    </script>
+    <script language="javascript">
+      var esempio_bottone = new Vue({
+        el: '#esempio_bottone',
+        data: {
+          counter: 0
+        }
+      });
+    </script>
+    <script language="javascript">
+      var form_esempio = new Vue({
+        el: '#form_esempio',
+        data: {
+          username: 'foo',
+          password: 'bar',
+        },
+        methods: {
+          click_handler: function (event) {
+            const request = {
+              username: this.username,
+              password: this.password,
+            };
+            const json = JSON.stringify(request);
+            this.$http.post('http://localhost:8888/auth', json)
+              .then(response => {
+                console.log('response', response.body)
+              })
+              .catch(err => {
+                console.log(err)
+              });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
